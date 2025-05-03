@@ -85,7 +85,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(`There was an error: ${error}`);
+      const code = (error as { code?: string })?.code;
+
+      if (code === "auth/email-already-in-use") {
+        toast.error("This email is already in use. Please sign in.");
+        router.push("/sign-in");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+        console.error("Auth error:", error);
+      }
     }
   }
 
